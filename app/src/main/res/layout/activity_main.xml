@@ -22,8 +22,8 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="50dp"
-        android:layout_height="55dp"
+        android:layout_width="53dp"
+        android:layout_height="54dp"
         android:background="@drawable/roundedbutton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +42,18 @@
         app:layout_constraintStart_toEndOf="@+id/imageButton"
         app:layout_constraintTop_toBottomOf="@+id/preview"
         app:srcCompat="@drawable/ic_baseline_flash_on_24" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="53dp"
+        android:layout_height="54dp"
+        android:background="@drawable/roundedbutton"
+        android:onClick="turnCamera"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/preview"
+        app:srcCompat="@drawable/ic_baseline_flip_camera_ios_24" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

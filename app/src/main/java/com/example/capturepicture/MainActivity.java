@@ -40,9 +40,10 @@ public class MainActivity extends AppCompatActivity {
     Camera camera;
 
     private int state=0;
+    private int cam_state=0;
 
-
-
+    int lens=CameraSelector.LENS_FACING_BACK;
+    ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
 
 
     @Override
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     private void startCamera() {
-        ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
+
         cameraProviderListenableFuture=ProcessCameraProvider.getInstance(this);
         cameraProviderListenableFuture.addListener(()->{
             try{
@@ -67,14 +68,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
    private void bindPreview(@NonNull ProcessCameraProvider cameraProvider){
+
+        cameraProvider.unbindAll();
        PreviewView previewView = findViewById(R.id.preview);
        Preview preview= new Preview.Builder().build();
 
        CameraSelector cameraSelector = new CameraSelector.Builder().
-               requireLensFacing(CameraSelector.LENS_FACING_BACK)
+               requireLensFacing(lens)
                .build();
 
         preview.setSurfaceProvider( previewView.createSurfaceProvider());
+
 
 
 
@@ -132,6 +136,32 @@ public class MainActivity extends AppCompatActivity {
         else {
             camera.getCameraControl().enableTorch(false);
             state=0;
+        }
+    }
+
+    public void turnCamera(View view) {
+
+        if(cam_state==0){
+            lens= CameraSelector.LENS_FACING_FRONT;
+            cam_state=1;
+            try {
+                bindPreview(cameraProviderListenableFuture.get());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            lens=CameraSelector.LENS_FACING_BACK;
+            cam_state=0;
+            try {
+                bindPreview(cameraProviderListenableFuture.get());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
