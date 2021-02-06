@@ -21,7 +21,7 @@
     </androidx.camera.view.PreviewView>
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/captureButton"
         android:layout_width="53dp"
         android:layout_height="54dp"
         android:background="@drawable/roundedbutton"
