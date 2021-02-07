@@ -3,6 +3,7 @@ package com.example.capturepicture;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
+import androidx.camera.core.CameraControl;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -177,10 +179,16 @@ public class MainActivity extends AppCompatActivity {
     public void cameraCapture(View view, ImageCapture imageCapture){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
 
+
         Date date = new Date();
-        File file = new File(directory(),
-                dateFormat.format(date) +
-                        ".jpg");
+        File file = null;
+        try {
+            file = File.createTempFile(
+                    dateFormat.format(date) +
+                            ".jpg",Environment.DIRECTORY_DCIM);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         ImageCapture.OutputFileOptions outputFileOptions =
@@ -190,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
                 new ImageCapture.OnImageSavedCallback() {
                     @Override
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
+                            //
+                        // Toast.makeText(MainActivity.this,"Saved Successfully", Toast.LENGTH_SHORT).show();
 
 
                     }
@@ -201,18 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public String directory()
-    {
-        String app_folder_path = "";
-        app_folder_path =
-                Environment.getExternalStorageDirectory().toString() + "/Pictures";
 
-        File dir = new File(app_folder_path);
-        if (!dir.exists() && !dir.mkdirs()) {
-
-        }
-        return app_folder_path;
-    }
 }
 
 
