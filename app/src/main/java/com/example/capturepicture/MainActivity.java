@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 requireLensFacing(lens)
                 .build();
 
-        preview.setSurfaceProvider(previewView.createSurfaceProvider());
+        preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
         ImageCapture imageCapture = new ImageCapture.Builder().
                 setTargetRotation(this.getWindowManager().getDefaultDisplay().getRotation())
@@ -181,15 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         Date date = new Date();
-        File file = null;
-        try {
-            file = File.createTempFile(
-                    dateFormat.format(date) +
-                            ".jpg",Environment.DIRECTORY_DCIM);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),dateFormat.format(date)+".jpg");
 
         ImageCapture.OutputFileOptions outputFileOptions =
                 new ImageCapture.OutputFileOptions.Builder(file).build();
@@ -211,6 +203,14 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+
+    public String getDirectory(){
+        String file_path = "";
+        file_path=Environment.DIRECTORY_PICTURES;
+
+
+        return file_path;
+    }
 
 }
 
