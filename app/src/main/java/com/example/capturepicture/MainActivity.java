@@ -17,7 +17,9 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 
 import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -25,6 +27,8 @@ import android.util.Rational;
 import android.util.Size;
 import android.view.TextureView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -55,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     int lens = CameraSelector.LENS_FACING_BACK;
     private ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
     private Executor cameraExecutor = Executors.newSingleThreadExecutor();
-    private ImageButton imageButton;
-
+    private ImageButton imageButton,flashButton,cameraRotateButton;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         permission();
         imageButton = findViewById(R.id.captureButton);
+        flashButton = findViewById(R.id.flashButton);
+        cameraRotateButton = findViewById(R.id.cameraRotate);
 
     }
 
@@ -102,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                imageButton.animate().scaleXBy(1).scaleYBy(1).setDuration(300);
                 cameraCapture(v,imageCapture);
             }
         });
@@ -143,10 +151,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void turnFlash(View view) {
         if (state == 0) {
+
             camera.getCameraControl().enableTorch(true);
             state = 1;
+            flashButton.animate().scaleYBy(1).scaleXBy(1).setDuration(300);
         } else {
             camera.getCameraControl().enableTorch(false);
+            flashButton.animate().scaleY(1).scaleX(1).setDuration(300);
             state = 0;
         }
     }
@@ -157,7 +168,9 @@ public class MainActivity extends AppCompatActivity {
             lens = CameraSelector.LENS_FACING_FRONT;
             cam_state = 1;
             try {
+                cameraRotateButton.animate().scaleYBy(1).scaleXBy(1).setDuration(100);
                 bindPreview(cameraProviderListenableFuture.get());
+                cameraRotateButton.animate().scaleX(1).scaleY(1).setDuration(100);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -167,7 +180,9 @@ public class MainActivity extends AppCompatActivity {
             lens = CameraSelector.LENS_FACING_BACK;
             cam_state = 0;
             try {
+                cameraRotateButton.animate().scaleYBy(1).scaleXBy(1).setDuration(100);
                 bindPreview(cameraProviderListenableFuture.get());
+                cameraRotateButton.animate().scaleX(1).scaleY(1).setDuration(100);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -192,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults outputFileResults) {
                             //
                         // Toast.makeText(MainActivity.this,"Saved Successfully", Toast.LENGTH_SHORT).show();
-
+                        imageButton.animate().scaleY(1).scaleX(1).setDuration(300);
 
                     }
 
